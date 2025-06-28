@@ -51,16 +51,16 @@ document.addEventListener("DOMContentLoaded", () => {
           let x = "0%";
           let rotation = 0;
           if (index === 0) {
-            x = gsap.utils.interpolate("0%", "90%".smoothStep(cardProgress));
+            x = gsap.utils.interpolate("0%", "90%", smoothStep(cardProgress));
             rotation = gsap.utils.interpolate(0, -15, smoothStep(cardProgress));
           } else if (index === 2) {
-            x = gsap.utils.interpolate("0%", "-90%".smoothStep(cardProgress));
+            x = gsap.utils.interpolate("0%", "-90%", smoothStep(cardProgress));
             rotation = gsap.utils.interpolate(0, 15, smoothStep(cardProgress));
           }
   
           gsap.set(cardId, {
             y: y,
-            y: x,
+            x: x,
             rotation: rotation,
             scale: scale,
           });
@@ -83,8 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
     end: `+=${window.innerHeight * 4}px`,
     onLeave: () => {
       const servicesSection = document.querySelector(".services");
-      const servicesRect = document.servicesSection.getBoundingClientReact();
-      const servicesTop = window.pageYOffset + servicesRect.servicesTop;
+      const servicesRect = servicesSection.getBoundingClientRect();
+      const servicesTop = window.pageYOffset + servicesRect.top;
   
       gsap.set(".cards", {
         position: "absolute",
@@ -104,11 +104,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     },
   });
+
+  
   
   ScrollTrigger.create({
     trigger: ".services",
     start: "top bottom",
-    end: `+=${window.innerHeight * 4}`,
+    end: `+=${window.innerHeight * 4}px`,
     scrub: 1,
     onUpdate: (self) => {
       const progress = self.progress;
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const cardProgress = gsap.utils.clamp(
           0,
           1,
-          (progress - delay * 1) / (0.9 - delay * 0.1)
+          (progress - delay * 0.1) / (0.9 - delay * 0.1)
         );
   
         const innerCard = document.querySelector(`${cardId} .flip-card-inner`);
@@ -135,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cardProgress < 0.4) {
           const normalizedProgress = cardProgress / 0.4;
           y = gsap.utils.interpolate(
-            "-100*",
+            "-100%",
             "50%",
             smoothStep(normalizedProgress)
           );
@@ -151,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const normalizedProgress = cardProgress / 0.4;
           scale = gsap.utils.interpolate(
             0.25,
-            0.27,
+            0.75,
             smoothStep(normalizedProgress)
           );
         } else if (cardProgress < 0.6) {
